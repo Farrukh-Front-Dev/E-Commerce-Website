@@ -6,8 +6,9 @@ import { CartItem } from '@/features/cart/components/cart-item'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, ShoppingBag } from 'lucide-react'
+import { ProtectedRoute } from '@/features/auth/components/protected-route'
 
-export default function CartPage() {
+function CartContent() {
   const { items, getTotalPrice, clearCart } = useCartStore()
   const totalPrice = getTotalPrice()
 
@@ -66,9 +67,11 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <Button className="w-full" size="lg">
-                Proceed to Checkout
-              </Button>
+              <Link href="/checkout">
+                <Button className="w-full" size="lg">
+                  Proceed to Checkout
+                </Button>
+              </Link>
 
               <Button
                 variant="outline"
@@ -82,5 +85,13 @@ export default function CartPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CartPage() {
+  return (
+    <ProtectedRoute>
+      <CartContent />
+    </ProtectedRoute>
   )
 }

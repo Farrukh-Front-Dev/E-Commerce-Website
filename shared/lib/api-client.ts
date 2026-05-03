@@ -25,15 +25,39 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export const apiClient = {
-  get: async <T>(endpoint: string): Promise<T> => {
-    const response = await fetch(`${BASE_URL}${endpoint}`)
+  get: async <T>(endpoint: string, token?: string): Promise<T> => {
+    const headers: HeadersInit = {}
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+    
+    const response = await fetch(`${BASE_URL}${endpoint}`, { headers })
     return handleResponse<T>(response)
   },
 
-  post: async <T>(endpoint: string, data: unknown): Promise<T> => {
+  post: async <T>(endpoint: string, data: unknown, token?: string): Promise<T> => {
+    const headers: HeadersInit = { 'Content-Type': 'application/json' }
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
+      body: JSON.stringify(data),
+    })
+    return handleResponse<T>(response)
+  },
+
+  put: async <T>(endpoint: string, data: unknown, token?: string): Promise<T> => {
+    const headers: HeadersInit = { 'Content-Type': 'application/json' }
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
+      method: 'PUT',
+      headers,
       body: JSON.stringify(data),
     })
     return handleResponse<T>(response)

@@ -21,12 +21,6 @@ export interface ProductsResponse {
   limit: number
 }
 
-export interface Category {
-  slug: string
-  name: string
-  url: string
-}
-
 export interface User {
   id: number
   username: string
@@ -44,6 +38,14 @@ export interface LoginCredentials {
   password: string
 }
 
+export interface RegisterData {
+  username: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+}
+
 export interface CartItem {
   product: Product
   quantity: number
@@ -54,4 +56,37 @@ export interface SearchParams {
   category?: string
   limit?: number
   skip?: number
+}
+
+export interface Order {
+  id: number
+  products: {
+    id: number
+    title: string
+    price: number
+    quantity: number
+    total: number
+    thumbnail: string
+  }[]
+  total: number
+  discountedTotal: number
+  userId: number
+  totalProducts: number
+  totalQuantity: number
+}
+
+export interface Category {
+  slug: string
+  name: string
+  url: string
+}
+
+export interface CheckoutData {
+  firstName: string
+  lastName: string
+  email: string
+  address: string
+  city: string
+  zipCode: string
+  country: string
 }

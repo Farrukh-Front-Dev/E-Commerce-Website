@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/lib/api-client'
-import type { Product, ProductsResponse, SearchParams } from '@/shared/types'
+import type { Product, ProductsResponse, SearchParams, Category } from '@/shared/types'
 
 export const productsApi = {
   getProducts: async (params: SearchParams = {}): Promise<ProductsResponse> => {
@@ -22,7 +22,7 @@ export const productsApi = {
     return apiClient.get<Product>(`/products/${id}`)
   },
 
-  getCategories: async (): Promise<string[]> => {
-    return apiClient.get<string[]>('/products/categories')
+  getCategories: async (): Promise<Category[]> => {
+    return apiClient.get<Category[]>('/products/categories')
   },
 }

@@ -10,9 +10,10 @@ import type { Product } from '@/shared/types'
 
 interface ProductCardProps {
   product: Product
+  priority?: boolean
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, priority = false }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem)
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -33,6 +34,7 @@ export function ProductCard({ product }: ProductCardProps) {
               fill
               className="object-cover rounded-md"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={priority}
             />
             {product.discountPercentage > 0 && (
               <Badge className="absolute top-2 right-2" variant="destructive">
