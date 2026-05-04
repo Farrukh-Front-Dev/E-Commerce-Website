@@ -10,6 +10,8 @@ interface CartState {
   clearCart: () => void
   getTotalItems: () => number
   getTotalPrice: () => number
+  validateStock: (productId: number, quantity: number) => boolean
+  getItemQuantity: (productId: number) => number
 }
 
 export const useCartStore = create<CartState>()(
@@ -24,13 +26,26 @@ export const useCartStore = create<CartState>()(
           )
 
           if (existingItem) {
+            // Check stock before adding
+            const newQuantity = existingItem.quantity + 1
+            if (newQuantity > product.stock) {
+              console.warn(`Cannot add more. Only ${product.stock} in stock.`)
+              return state // Don't modify state
+            }
+
             return {
               items: state.items.map((item) =>
                 item.product.id === product.id
-                  ? { ...item, quantity: item.quantity + 1 }
+                  ? { ...item, quantity: newQuantity }
                   : item
               ),
             }
+          }
+
+          // Check stock for new item
+          if (product.stock < 1) {
+            console.warn('Product out of stock')
+            return state
           }
 
           return {
@@ -51,11 +66,21 @@ export const useCartStore = create<CartState>()(
           return
         }
 
-        set((state) => ({
-          items: state.items.map((item) =>
-            item.product.id === productId ? { ...item, quantity } : item
-          ),
-        }))
+        set((state) => {
+          const item = state.items.find((i) => i.product.id === productId)
+          
+          // Validate stock
+          if (item && quantity > item.product.stock) {
+            console.warn(`Cannot set quantity to ${quantity}. Only ${item.product.stock} in stock.`)
+            return state
+          }
+
+          return {
+            items: state.items.map((item) =>
+              item.product.id === productId ? { ...item, quantity } : item
+            ),
+          }
+        })
       },
 
       clearCart: () => {
@@ -72,9 +97,21 @@ export const useCartStore = create<CartState>()(
           0
         )
       },
+
+      validateStock: (productId, quantity) => {
+        const item = get().items.find((i) => i.product.id === productId)
+        if (!item) return false
+        return quantity <= item.product.stock
+      },
+
+      getItemQuantity: (productId) => {
+        const item = get().items.find((i) => i.product.id === productId)
+        return item?.quantity || 0
+      },
     }),
     {
       name: 'cart-storage',
+      version: 1, // Add versioning for future migrations
     }
   )
 )

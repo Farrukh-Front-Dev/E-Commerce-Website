@@ -59,6 +59,8 @@ export interface SearchParams {
 }
 
 export interface Order {
+  status: any
+  shippingAddress: any
   id: number
   products: {
     id: number

@@ -40,16 +40,17 @@ export function CheckoutForm({ onSubmit, isSubmitting }: CheckoutFormProps) {
         <CardTitle>Shipping Information</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="firstName" className="text-sm font-medium">
+              <label htmlFor="firstName" className="text-sm font-medium leading-none">
                 First Name
               </label>
               <Input
                 id="firstName"
                 {...register('firstName')}
                 disabled={isSubmitting}
+                className="h-10"
               />
               {errors.firstName && (
                 <p className="text-sm text-destructive">{errors.firstName.message}</p>
@@ -57,13 +58,14 @@ export function CheckoutForm({ onSubmit, isSubmitting }: CheckoutFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="lastName" className="text-sm font-medium">
+              <label htmlFor="lastName" className="text-sm font-medium leading-none">
                 Last Name
               </label>
               <Input
                 id="lastName"
                 {...register('lastName')}
                 disabled={isSubmitting}
+                className="h-10"
               />
               {errors.lastName && (
                 <p className="text-sm text-destructive">{errors.lastName.message}</p>
@@ -72,7 +74,7 @@ export function CheckoutForm({ onSubmit, isSubmitting }: CheckoutFormProps) {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
+            <label htmlFor="email" className="text-sm font-medium leading-none">
               Email
             </label>
             <Input
@@ -80,6 +82,7 @@ export function CheckoutForm({ onSubmit, isSubmitting }: CheckoutFormProps) {
               type="email"
               {...register('email')}
               disabled={isSubmitting}
+              className="h-10"
             />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -87,13 +90,14 @@ export function CheckoutForm({ onSubmit, isSubmitting }: CheckoutFormProps) {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="address" className="text-sm font-medium">
+            <label htmlFor="address" className="text-sm font-medium leading-none">
               Address
             </label>
             <Input
               id="address"
               {...register('address')}
               disabled={isSubmitting}
+              className="h-10"
             />
             {errors.address && (
               <p className="text-sm text-destructive">{errors.address.message}</p>
@@ -102,13 +106,14 @@ export function CheckoutForm({ onSubmit, isSubmitting }: CheckoutFormProps) {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="city" className="text-sm font-medium">
+              <label htmlFor="city" className="text-sm font-medium leading-none">
                 City
               </label>
               <Input
                 id="city"
                 {...register('city')}
                 disabled={isSubmitting}
+                className="h-10"
               />
               {errors.city && (
                 <p className="text-sm text-destructive">{errors.city.message}</p>
@@ -116,13 +121,14 @@ export function CheckoutForm({ onSubmit, isSubmitting }: CheckoutFormProps) {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="zipCode" className="text-sm font-medium">
+              <label htmlFor="zipCode" className="text-sm font-medium leading-none">
                 ZIP Code
               </label>
               <Input
                 id="zipCode"
                 {...register('zipCode')}
                 disabled={isSubmitting}
+                className="h-10"
               />
               {errors.zipCode && (
                 <p className="text-sm text-destructive">{errors.zipCode.message}</p>
@@ -131,21 +137,22 @@ export function CheckoutForm({ onSubmit, isSubmitting }: CheckoutFormProps) {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="country" className="text-sm font-medium">
+            <label htmlFor="country" className="text-sm font-medium leading-none">
               Country
             </label>
             <Input
               id="country"
               {...register('country')}
               disabled={isSubmitting}
+              className="h-10"
             />
             {errors.country && (
               <p className="text-sm text-destructive">{errors.country.message}</p>
             )}
           </div>
 
-          <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
-            {isSubmitting ? 'Processing...' : 'Place Order'}
+          <Button type="submit" className="w-full mt-6" size="lg" disabled={isSubmitting}>
+            {isSubmitting ? 'Processing Payment...' : 'Place Order'}
           </Button>
         </form>
       </CardContent>

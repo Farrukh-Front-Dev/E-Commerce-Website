@@ -20,16 +20,18 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2">
-          <span className="text-2xl font-bold">E-Shop</span>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+      <div className="container flex h-16 items-center justify-between gap-4">
+        <Link href="/" className="flex items-center space-x-2 shrink-0">
+          <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            E-Shop
+          </span>
         </Link>
         
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-2 md:gap-4">
           <Link
             href="/products"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className="text-sm font-medium transition-colors hover:text-primary px-3 py-2 rounded-md hover:bg-accent"
           >
             Products
           </Link>
@@ -40,10 +42,10 @@ export function Header() {
                 <>
                   <Link
                     href="/profile"
-                    className="text-sm font-medium transition-colors hover:text-primary flex items-center gap-2"
+                    className="text-sm font-medium transition-colors hover:text-primary flex items-center gap-2 px-3 py-2 rounded-md hover:bg-accent"
                   >
                     <User className="h-4 w-4" />
-                    {user.firstName}
+                    <span className="hidden sm:inline">{user.firstName}</span>
                   </Link>
                   <Button
                     variant="ghost"
@@ -52,7 +54,7 @@ export function Header() {
                     className="flex items-center gap-2"
                   >
                     <LogOut className="h-4 w-4" />
-                    Logout
+                    <span className="hidden sm:inline">Logout</span>
                   </Button>
                 </>
               ) : (
@@ -65,8 +67,10 @@ export function Header() {
             </>
           )}
 
-          <ThemeToggle />
-          <CartButton />
+          <div className="flex items-center gap-1 ml-2 pl-2 border-l">
+            <ThemeToggle />
+            <CartButton />
+          </div>
         </nav>
       </div>
     </header>

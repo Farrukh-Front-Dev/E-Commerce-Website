@@ -24,6 +24,38 @@ async function handleResponse<T>(response: Response): Promise<T> {
   return response.json()
 }
 
+async function fetchWithRetry<T>(
+  url: string,
+  options: RequestInit,
+  retries = 2
+): Promise<T> {
+  let lastError: Error | null = null
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(url, options)
+      return await handleResponse<T>(response)
+    } catch (error) {
+      lastError = error as Error
+
+      // Don't retry on client errors (4xx)
+      if (error instanceof ApiError && error.status >= 400 && error.status < 500) {
+        throw error
+      }
+
+      // Don't retry on last attempt
+      if (attempt === retries) {
+        throw error
+      }
+
+      // Exponential backoff: wait 1s, then 2s
+      await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)))
+    }
+  }
+
+  throw lastError || new Error('Request failed after retries')
+}
+
 export const apiClient = {
   get: async <T>(endpoint: string, token?: string): Promise<T> => {
     const headers: HeadersInit = {}
@@ -31,8 +63,7 @@ export const apiClient = {
       headers['Authorization'] = `Bearer ${token}`
     }
     
-    const response = await fetch(`${BASE_URL}${endpoint}`, { headers })
-    return handleResponse<T>(response)
+    return fetchWithRetry<T>(`${BASE_URL}${endpoint}`, { headers })
   },
 
   post: async <T>(endpoint: string, data: unknown, token?: string): Promise<T> => {
@@ -41,12 +72,11 @@ export const apiClient = {
       headers['Authorization'] = `Bearer ${token}`
     }
 
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
+    return fetchWithRetry<T>(`${BASE_URL}${endpoint}`, {
       method: 'POST',
       headers,
       body: JSON.stringify(data),
     })
-    return handleResponse<T>(response)
   },
 
   put: async <T>(endpoint: string, data: unknown, token?: string): Promise<T> => {
@@ -55,11 +85,10 @@ export const apiClient = {
       headers['Authorization'] = `Bearer ${token}`
     }
 
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
+    return fetchWithRetry<T>(`${BASE_URL}${endpoint}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify(data),
     })
-    return handleResponse<T>(response)
   },
 }
